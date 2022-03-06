@@ -8,8 +8,9 @@ from rest_framework import filters
 
 from posts.models import Comment, Follow, Group, Post
 from .serializers import (
-    CommentSerializer, PostSerializer, GroupSerializer
+    CommentSerializer, PostSerializer, GroupSerializer, FollowSerializer
 )
+from .mixins import ListCreateViewSet
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -39,5 +40,14 @@ class CommentViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user, post=post)
 
 
-class FollowViewSet(viewsets.ModelViewSet):
-    pass
+class FollowViewSet(ListCreateViewSet):
+    serializer_class = FollowSerializer
+    permission_classes = (IsAuthenticated,)
+    search_fields = ('following__username', 'user__username')
+    filter_backends = (filters.SearchFilter,)
+
+    def get_queryset(self):
+        return self.request.user.follower.all()
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
