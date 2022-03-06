@@ -47,3 +47,26 @@ python3 manage.py migrate
 ```
 python3 manage.py runserver
 ```
+
+  
+# Примеры запросов
+Документация проекта доступна по [адресу](http://127.0.0.1:8000/redoc/) 
+
+###Пример GET запроса:  
+```
+GET api/v1/groups/
+```
+```http://127.0.0.1:8000/api/v1/groups/```  
+###Пример ответа:
+```
+[
+    ...
+    {
+        "id": 0,
+        "title": "string",
+        "slug": "string",
+        "description": "string"
+    }
+    ...
+]
+```
